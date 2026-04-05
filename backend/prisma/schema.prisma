@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+
+}
+
+datasource db {
+  provider = "postgresql"
+
+}
+
+model User {
+  id        String   @id 
+  name      String
+  email     String   @unique
+  detail    Json?
+  goal      String?
+  avatarUrl String
+  totalXp   Int  @default(0)
+  currentStreak Int @default(0)
+  longestStreak Int @default(0)
+  level     String?  // "beginner" | "intermediate" | "advanced"
+  lastActive DateTime 
+  createdAt DateTime @default(now())
+
+
+  learningPaths      LearningPath[]
+  checkpointProgress CheckpointProgress[]
+  dailyQuizzes       DailyQuiz[]
+  leaderboardEntries LeaderboardEntry[]
+  streakLogs         StreakLog[]
+  chatSession ChatSession[]
+
+}
+
+
+model LearningPath {
+  id            String   @id @default(uuid())
+  userId        String
+  description   String?
+  subject      String
+  aiMetadata    Json?    // target nya untuk AI 
+  difficultyLevel String // begginer intermediate advance
+  status        String @default("active") // active | complete | 
+  totalCheckpoints Int @default(0)
+  currentCheckpoint Int @default(0)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user   User    @relation(fields: [userId], references: [id])
+  checkpoints Checkpoint[]
+  chatSession ChatSession[]
+}
+
+model Checkpoint { 
+  id String @id @default(uuid())
+  learningPathId String
+  orderIndex Int 
+  title String
+  description String?
+  materialContent String?
+  materialPdfUrl String?
+  status String @default("locked") // locked | finished | unlock
+  xpReward Int
+  createdAt DateTime @default(now())
+
+  learningPath LearningPath    @relation(fields: [learningPathId], references: [id])
+  exercises    Exercise[]
+  progress     CheckpointProgress[]
+}
+
+
+model Exercise { 
+  id String @id @default(uuid())
+  checkpointId String 
+  question String
+  options Json // ["a..","b..",dst]
+  explanation String?
+  correctAnswer String
+  difficulty String @default("medium")
+  orderIndex Int 
+  
+  checkpoint Checkpoint @relation(fields: [checkpointId], references: [id])
+  
+}
+
+model CheckpointProgress{
+  id String @id @default(uuid())
+  userId String
+  checkpointId String
+  status String @default("in_progress") // done | in_progress
+  score Int @default(0)
+  attempts Int @default(0)
+  completedAt DateTime? 
+
+  user       User       @relation(fields: [userId], references: [id])
+  checkpoint Checkpoint @relation(fields: [checkpointId], references: [id])
+
+  @@unique([userId, checkpointId])
+
+}
+
+model DailyQuiz { 
+  id String @id @default(uuid())
+  userId String 
+  quizDate DateTime
+  totalQuestions Int @default(5)
+  questions Json
+  score Int @default(0)
+  completed Boolean @default(false)
+  completedAt DateTime? 
+
+  user User @relation(fields: [userId], references: [id])
+    @@unique([userId, quizDate])
+
+}
+
+model LeaderboardEntry { 
+  id String @id @default(uuid())
+  userId String 
+  periodType String 
+  periodStart DateTime 
+  xpGained Int @default(0)
+  rank Int @default(0)
+  updatedAt DateTime @updatedAt
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, periodType, periodStart])
+}
+
+model StreakLog { 
+  id String @id @default(uuid())
+  userId String
+  logDate DateTime
+  completedDaily Boolean
+  xpEarned Int 
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, logDate])
+
+}
+
+
+
+
+model ChatSession {
+  id        String   @id @default(uuid())
+  userId String
+  learningPathId    String
+  type      String   @default("learning") // "onboarding" | "learning"
+  createdAt DateTime @default(now())
+
+  user     User          @relation(fields: [userId], references: [id])
+  learningPath LearningPath       @relation(fields: [learningPathId], references: [id])
+  messages ChatMessage[]
+}
+
+model ChatMessage {
+  id        String   @id @default(uuid())
+  sessionId String
+  role      String   // "user" | "assistant"
+  content   String
+  createdAt DateTime @default(now())
+
+  session ChatSession @relation(fields: [sessionId], references: [id])
+}
