@@ -98,7 +98,10 @@ model CheckpointProgress{
   score Int @default(0)
   attempts Int @default(0)
   completedAt DateTime? 
-
+  
+  pdfRead Boolean @default(false)
+  exerciseDone Boolean @default(false)
+  
   user       User       @relation(fields: [userId], references: [id])
   checkpoint Checkpoint @relation(fields: [checkpointId], references: [id])
 
