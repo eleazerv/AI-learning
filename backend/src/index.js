@@ -1,5 +1,7 @@
 import express from "express";
 import 'dotenv/config'
+import cors from "cors";
+
 
 import profileRouter from "./router/profile.routes.js";
 import userRouter from "./router/user.routes.js";
@@ -13,7 +15,14 @@ import leaderboardRouter from "./router/leaderboard.routes.js";
 
 
 
+
 const app = express();
+
+app.use(cors({
+    origin: "http://localhost:4000",
+    credentials: true,
+    allowedHeaders: ["Content-Type", "Authorization"],
+}))
 
 app.use(express.json());
 
