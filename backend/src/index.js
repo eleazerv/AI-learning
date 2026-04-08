@@ -7,7 +7,7 @@ import LearningPathRouter from "./router/learningPath.routes.js";
 import checkpointRouter from "./router/checkpoint.routes.js";
 import streakRouter from "./router/streak.routes.js";
 // import dailyQuizRouter from "./router/daily-quiz.routes.js";
-// import leaderboardRouter from "./router/leaderboard.routes.js";
+import leaderboardRouter from "./router/leaderboard.routes.js";
 // import quizRouter from "./router/streak.routes.js";
 // import chatRouter from "./router/chat.routes.js";
 
@@ -22,7 +22,7 @@ app.use("/api/user",userRouter);
 app.use("/api/learning-path",LearningPathRouter);
 app.use("/api/checkpoint",checkpointRouter);
 // app.use("/api/daily-quiz",dailyQuizRouter);
-// app.use("/api/leaderboard",leaderboardRouter);
+app.use("/api/leaderboard",leaderboardRouter);
 app.use("/api/streak",streakRouter);
 // app.use("api/chat",chatRouter);
 

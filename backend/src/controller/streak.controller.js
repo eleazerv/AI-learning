@@ -1,5 +1,6 @@
 
 import prisma from "../lib/prisma.js";
+import { systemXpUpdate } from "../service/xpUpdate.js";
 export const getStreak = async (req, res) => {
     try {
         const userId = req.user.id 
@@ -36,7 +37,7 @@ export const updateStreak = async (req, res) => {
         if ( typeof done !== "boolean") {
             return res.status(400).json({ message: "done must be a boolean" });
         }
-        const today = new Date("2026-04-20"); 
+        const today = new Date(); 
         today.setUTCHours(0,0,0,0)
         const exisitingLog = await prisma.streakLog.findUnique({
             where :{userId_logDate : {userId, logDate : today}}
@@ -93,6 +94,11 @@ export const updateStreak = async (req, res) => {
                 totalXp : true , 
             }
         })
+
+        const xpUpdate = await systemXpUpdate(userId, xpEarned) ; 
+        if (!xpUpdate) {
+            return res.status(500).json({ message: "Xpupdate error" });
+        }
 
         res.status(200).json({ data : updateUser});
     } catch (error) {
