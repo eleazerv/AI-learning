@@ -24,6 +24,10 @@
 // }
 
 // export default page
+// http://localhost:4000/dashboard/new ( buat path baru )
+// const { subject, currentLevel , targetLevel , learningStyle, requestUser} = req.body ; 
+// http://localhost:4000/dashboard/path/{id}/checkpoint/{cpid} + /pdf + /exercise 
+// dashboard ( kalo ada ide )
 
 import Link from "next/link";
 
@@ -32,6 +36,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useLearningStore } from "@/stores/learning-store";
 import { use, useEffect } from "react";
 import { useParams } from "next/navigation";
+
 export default function CheckpointList() {
   const {paths,currentPath,currentCheckpoint,loading,checkpointLoading,error, fetchPaths, fetchPath,fetchCheckpoint} = useLearningStore()
   const checkpoints = currentPath?.checkpoints
@@ -41,6 +46,7 @@ export default function CheckpointList() {
   useEffect(() => {
       if (pathId) fetchPath(pathId)
     }, [pathId])
+
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
   
@@ -50,7 +56,7 @@ export default function CheckpointList() {
     <div className=" gap-10 relative pl-10 space-y-10">
       
    
-      {checkpoints?.map((checkpoint, index) => (
+      {checkpoints?.map((checkpoint) => (
         <Link key={checkpoint.id} className="relative m-20" 
               href={`/dashboard/path/${pathId}/checkpoint/${checkpoint.id}`
               
