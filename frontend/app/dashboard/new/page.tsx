@@ -38,11 +38,16 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 
+import { useRouter } from "next/navigation";
 const formSchema = z.object({
   subject: z.string().min(1, "Subject harus diisi").max(32),
   currentLevel: z.enum(["beginner", "intermediate", "advanced"]),
   targetLevel: z.enum(["beginner", "intermediate", "advanced"]),
   learningStyle: z
+    .string()
+    .min(5, "Deskripsikan metode belajar Anda")
+    .max(200),
+  requestUser: z
     .string()
     .min(5, "Deskripsikan metode belajar Anda")
     .max(200),
@@ -57,8 +62,11 @@ export default function StudyForm() {
       currentLevel: "beginner",
       targetLevel: "intermediate",
       learningStyle: "",
+      requestUser: ""
     },
   });
+
+  const router = useRouter();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log("udah submit");
@@ -68,6 +76,7 @@ export default function StudyForm() {
         currentLevel: data.currentLevel,
         targetLevel: data.targetLevel,
         learningStyle: data.learningStyle,
+        requestUser: data.requestUser
       })
       toast("You submitted the following values:", {
         description: (
@@ -79,6 +88,7 @@ export default function StudyForm() {
         classNames: { content: "flex flex-col gap-2" },
       });
       form.reset();
+      router.push(`/dashboard/path/${newPath.id}`)
     } catch (err) {
       toast.error("Failed to create Learning Path")
     }
@@ -190,6 +200,26 @@ export default function StudyForm() {
                   </Field>
                 )}
               />
+              <Controller
+                name="requestUser"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="requestUser">
+                      Request User
+                    </FieldLabel>
+                    <Input
+                      {...field}
+                      id="requestUser"
+                      placeholder="Username"
+                      aria-invalid={fieldState.invalid}
+                    />
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
             </FieldGroup>
           </form>
         </CardContent>
@@ -202,7 +232,7 @@ export default function StudyForm() {
             >
               Reset
             </Button>
-            <Button type="submit" form="study-form">
+            <Button type="submit" form="study-form" onClick={() => { console.log('test')}} >
               Submit
             </Button>
           </Field>

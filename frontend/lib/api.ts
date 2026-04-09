@@ -79,7 +79,7 @@ export async function getLearningPath(id: string): Promise<LearningPath> {
 export async function createLearningPath(
   payload: CreateLearningPathPayload
 ): Promise<LearningPath> {
-  const { data } = await api.post<ApiResponse<LearningPath>>("/api/learning-path", payload);
+  const { data } = await api.post<ApiResponse<LearningPath>>("/api/learning-path/buat", payload);
   return data.data;
 }
 

@@ -113,6 +113,7 @@ export interface CreateLearningPathPayload {
   currentLevel?: Level;
   targetLevel?: Level;
   learningStyle?: string;
+  requestUser?: string;
 }
 
 //  Checkpoint Detail 
