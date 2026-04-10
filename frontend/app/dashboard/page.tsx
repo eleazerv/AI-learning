@@ -1,16 +1,20 @@
+"use client";
 
+import Link from "next/link";
 import { useLearningStore } from "@/stores/learning-store";
 import { useUserStore } from "@/stores/user-store";
-import Header from "@/components/layout/header";
+import { useLeaderboardStore } from "@/stores/leaderboard-store";
+import type { LearningPath, StreakLog } from "@/types";
+import { StatCards } from "@/components/dashboard/StatCards";
+import { PathProgress } from "@/components/dashboard/PathProgress";
+import { StreakHeatmap } from "@/components/dashboard/StreakHeatmap";
+import { GoalCard } from "@/components/dashboard/GoalCard";
 
+export default function Dashboard() {
 
-
-export default function Dashboard(){
-
-    return(
-        <>
-            <h1>test</h1>
-        </>
-    );
-
+  return (
+    <div>
+        Selamat Belajar :D 
+    </div>
+  );
 }
