@@ -5,10 +5,6 @@ import { useLearningStore } from "@/stores/learning-store";
 import { useUserStore } from "@/stores/user-store";
 import { useLeaderboardStore } from "@/stores/leaderboard-store";
 import type { LearningPath, StreakLog } from "@/types";
-import { StatCards } from "@/components/dashboard/StatCards";
-import { PathProgress } from "@/components/dashboard/PathProgress";
-import { StreakHeatmap } from "@/components/dashboard/StreakHeatmap";
-import { GoalCard } from "@/components/dashboard/GoalCard";
 
 export default function Dashboard() {
 
