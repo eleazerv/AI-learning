@@ -23,7 +23,7 @@
   "description": "",
   "main": "prisma.config.js",
   "scripts": {
-    "build": "npx prisma generate && nest build",
+    "build": "npx prisma generate",
     "postinstall": "prisma generate",
     "start": "node src/index.js",
     "dev": "nodemon --exec \"node --env-file=.env\" src/index.js",
