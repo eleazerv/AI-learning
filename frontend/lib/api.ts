@@ -18,6 +18,7 @@ import type {
   CheckInResponse,
   ApiResponse,
   CreateLearningPathPayload,
+  ReadResponse,
 } from "@/types";
 
 const BASE_URL = "http://localhost:3001" ;
@@ -90,9 +91,9 @@ export async function getCheckpoint(id: string): Promise<CheckpointDetail> {
   return data.data;
 }
 
-export async function readPdf(id: string): Promise<CheckpointProgress> {
-  const { data } = await api.post<ApiResponse<CheckpointProgress>>(`/api/checkpoint/${id}/pdf-read`);
-  return data.data 
+export async function readPdf(id: string): Promise<ApiResponse<ReadResponse>> {
+  const { data } = await api.post<ApiResponse<ReadResponse>>(`/api/checkpoint/${id}/pdf-read`);
+  return data;
 }
 
 export async function submitCheckpoint(

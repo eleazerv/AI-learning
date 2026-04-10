@@ -1,32 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCheckpointStore } from "@/stores/checkpoint-store";
 import Link from "next/link";
-
-interface Exercise {
-  id: string;
-  checkpointId: string;
-  difficulty: string;
-}
+import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 
 export default function Container() {
+  const router = useRouter();
   const params = useParams();
   const cpid = params.cpid as string;
-  const { fetchCheckpoint, current } = useCheckpointStore();
-  const [exercises, setExercises] = useState<Exercise[]>([]);
-
-  useEffect(() => {
-    fetchCheckpoint(cpid);
-  }, [cpid, fetchCheckpoint]);
-  useEffect(() => {
-    if (current?.exercises) {
-      setExercises(current.exercises);
-    }
-  }, [current]);
-
-  if (!current) return <div>Loading...</div>;
-
+  const id = params.id as string;
+  const readPdf = useCheckpointStore((state) => state.readPdf);
+  const loading = useCheckpointStore((state) => state.loading);
+  const handleClick = async () => {
+    const res = await readPdf(cpid);
+    console.log(res);
+    router.push(`http://localhost:4000/dashboard/path/${id}`);
+  };
   return (
     <div className="flex flex-col gap-6 p-4">
       <div className="border p-4 rounded-lg shadow-sm">
@@ -41,18 +33,9 @@ export default function Container() {
 
       <div className="border p-4 rounded-lg shadow-sm">
         <h2 className="text-xl font-semibold mb-2">PDF</h2>
-        <ul>
-          {current.exercises?.map((ex) => (
-            <li key={ex.id}>
-              <Link
-                href={`/dashboard/path/${params.id}/checkpoint/${cpid}/pdf/${ex.id}`}
-                className="text-green-600 underline"
-              >
-                PDF for Exercise {ex.id}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Button onClick={handleClick}>
+          {loading ? "Loading..." : "See PDF"}
+        </Button>
       </div>
     </div>
   );

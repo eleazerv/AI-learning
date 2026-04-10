@@ -207,3 +207,8 @@ export interface ApiResponse<T> {
   message?: string;
   count?: number;
 }
+
+export interface ReadResponse{
+  checkpointProgress: CheckpointProgress | null;
+  message: string | null;
+}

@@ -48,7 +48,7 @@ export const useCheckpointStore = create<CheckpointState>((set) => ({
     set({ loading: true, error: null })
     try {
         const data = await readPdf(id)
-        set({ checkpointProgress: data, loading: false });
+        set({ checkpointProgress: data.chec, loading: false });
     } catch (error) {
       set({ error: "Gagal memuat checkpoint", loading: false })
     }
