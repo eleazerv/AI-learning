@@ -4,6 +4,7 @@ import type {
   CheckpointProgress,
   AnswerPayload,
   SubmitResponse,
+  ReadResponse,
 } from "@/types"
 import { getCheckpoint, readPdf, submitCheckpoint } from "@/lib/api"
 
@@ -17,7 +18,7 @@ interface CheckpointState {
 
   fetchCheckpoint: (id: string) => Promise<void>
   submit: (id: string, answers: AnswerPayload[]) => Promise<SubmitResponse>
-  readPdf: (id: string) => Promise<void>
+  markReadPdf: (id: string) => Promise<ReadResponse>
   reset: () => void
 }
 
@@ -44,14 +45,15 @@ export const useCheckpointStore = create<CheckpointState>((set) => ({
     }
   },
 
-  readPdf: async (id) => {
+  markReadPdf: async (id) => {
     set({ loading: true, error: null })
     try {
         const data = await readPdf(id)
-        set({ checkpointProgress: data.chec, loading: false });
+        set({ checkpointProgress: data.checkpointProgress, loading: false });
+        return data ; 
     } catch (error) {
       set({ error: "Gagal memuat checkpoint", loading: false })
-    }
+    } throw Error ; 
   },
 
   submit: async (id, answers: AnswerPayload[]) => {

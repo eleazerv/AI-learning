@@ -21,6 +21,8 @@ import { triggerNextCheckpoint } from "../service/checkpoint-generator.js";
         return res.status(403).json({ message: "Checkpoint locked" });
     }
     if (!checkpoint.materialContent){ 
+        triggerNextCheckpoint(checkpoint.learningPathId, checkpoint.orderIndex)
+
         return res.status(202).json ({
             message: "Checkpoint material not generated yet",
             ready: false,
@@ -33,13 +35,11 @@ import { triggerNextCheckpoint } from "../service/checkpoint-generator.js";
       update: {},
     })
 
-    triggerNextCheckpoint(checkpoint.learningPathId, checkpoint.orderIndex)
  
     return res.status(200).json({ data: { ...checkpoint, ready: true } })
   } catch (error) {
     console.error('[Get Checkpoint]', error.message)
     return res.status(500).json({ message: 'Internal server error',})
-
     }
 }
 
@@ -56,13 +56,17 @@ export const markPdfRead = async (req, res) => {
  
     // Cek apakah kedua komponen sudah selesai
     if (progress.pdfRead && progress.exerciseDone) {
+      console.log("[Mark PDF Read] checkpoint complated") ; 
       await completeCheckpoint(userId, id)
     }
  
     return res.status(200).json({
-      data: progress,
-      progressPercent: calculateProgress(progress),
+      data : { 
+        checkpointProgress: progress,
+        progressPercent: calculateProgress(progress)
+      } 
     })
+
   } catch (error) {
     console.error('[Mark PDF Read]', error.message)
     return res.status(500).json({ message: 'Internal server error' })
@@ -127,11 +131,13 @@ const calculateProgress = (progress) => {
  
 // Helper: complete checkpoint → unlock next → tambah XP
 const completeCheckpoint = async (userId, checkpointId) => {
+
   const checkpoint = await prisma.checkpoint.findUnique({
     where: { id: checkpointId },
     include: { learningPath: true },
   })
- 
+// create checkpoint 
+  triggerNextCheckpoint(checkpoint.learningPathId, checkpoint.orderIndex)
   // 1. Mark checkpoint sebagai selesai
   await prisma.checkpointProgress.update({
     where: { userId_checkpointId: { userId, checkpointId } },

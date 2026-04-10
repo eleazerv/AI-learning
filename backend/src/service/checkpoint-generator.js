@@ -65,6 +65,7 @@ await prisma.checkpoint.update({
 
 
 export const triggerNextCheckpoint = (learningPathId, currentOrderIndex) => {
+  console.log(`[Generator] Triggering next checkpoint...`)
   const nextIndex = currentOrderIndex + 1
  
   // Jalankan tanpa await — background process

@@ -35,14 +35,15 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { useLearningStore } from "@/stores/learning-store";
 import { use, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams,useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CheckpointList() {
   const {paths,currentPath,currentCheckpoint,loading,checkpointLoading,error, fetchPaths, fetchPath,fetchCheckpoint} = useLearningStore()
   const checkpoints = currentPath?.checkpoints
   const params = useParams()
   const pathId = params.id as string
-  
+  const router = useRouter()
   useEffect(() => {
       if (pathId) fetchPath(pathId)
     }, [pathId])
@@ -50,6 +51,15 @@ export default function CheckpointList() {
   if (loading) return <div>Loading...</div>
   if (error) return <div>Error: {error}</div>
   
+  const onClickHandle = (id: string, status: string) => {
+  if (status == "completed" || status == "unlocked") {
+      router.push(`/dashboard/path/${params.id}/checkpoint/${id}/`)
+    } else {
+      toast("Checkpoint terkunci", {
+      description: "Selesaikan checkpoint sebelumnya terlebih dahulu.",
+      })
+    }
+  }
 
 
   return (
@@ -57,10 +67,9 @@ export default function CheckpointList() {
       
    
       {checkpoints?.map((checkpoint) => (
-        <Link key={checkpoint.id} className="relative m-20" 
-              href={`/dashboard/path/${pathId}/checkpoint/${checkpoint.id}`
-              
-              }>
+        <div key={checkpoint.id} className="relative " 
+              onClick={() => onClickHandle(checkpoint.id, checkpoint.status)}              
+              >
           
           {/* Card */}
           <Card className="bg-stone-700 text-white border border-zinc-700 rounded-xl
@@ -92,7 +101,7 @@ export default function CheckpointList() {
 
             </CardContent>
           </Card>
-        </Link>
+        </div>
       ))}
     </div>
   )

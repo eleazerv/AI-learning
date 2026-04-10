@@ -124,6 +124,7 @@ export interface CheckpointDetail extends Checkpoint {
   ready: boolean;
 }
 
+
 //  Submit 
 
 export interface AnswerPayload {
@@ -210,5 +211,5 @@ export interface ApiResponse<T> {
 
 export interface ReadResponse{
   checkpointProgress: CheckpointProgress | null;
-  message: string | null;
+  progressPercent: string ;
 }

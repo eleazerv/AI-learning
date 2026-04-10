@@ -7,13 +7,23 @@ import { useCheckpointStore } from "@/stores/checkpoint-store";
 import Link from "next/link";
 import { routerServerGlobal } from "next/dist/server/lib/router-utils/router-server-context";
 
+import { check } from "zod";
+
 export default function Container() {
   const router = useRouter();
   const params = useParams();
   const cpid = params.cpid as string;
   const id = params.id as string;
-  const readPdf = useCheckpointStore((state) => state.readPdf);
+  const fetchCheckpoint = useCheckpointStore((state) => state.fetchCheckpoint);
+  const checkpoint = useCheckpointStore((state) => state.current);
+  const readPdf = useCheckpointStore((state) => state.markReadPdf);
   const loading = useCheckpointStore((state) => state.loading);
+
+  useEffect(() => {
+    fetchCheckpoint(cpid);
+  }, [cpid]);
+
+
   const handleClick = async () => {
     const res = await readPdf(cpid);
     console.log(res);
@@ -33,8 +43,10 @@ export default function Container() {
 
       <div className="border p-4 rounded-lg shadow-sm">
         <h2 className="text-xl font-semibold mb-2">PDF</h2>
-        <Button onClick={handleClick}>
-          {loading ? "Loading..." : "See PDF"}
+        <Button >
+          <Link href={checkpoint?.materialPdfUrl ?? "#"} target="_blank" rel="noopener noreferrer">
+                  {loading ? "Loading..." : "See PDF" }
+          </Link>
         </Button>
       </div>
     </div>

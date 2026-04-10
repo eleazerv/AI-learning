@@ -91,9 +91,10 @@ export async function getCheckpoint(id: string): Promise<CheckpointDetail> {
   return data.data;
 }
 
-export async function readPdf(id: string): Promise<ApiResponse<ReadResponse>> {
+export async function readPdf(id: string): Promise<ReadResponse> {
   const { data } = await api.post<ApiResponse<ReadResponse>>(`/api/checkpoint/${id}/pdf-read`);
-  return data;
+  if (!data.data) throw new Error('invalid response')
+  return data.data ;
 }
 
 export async function submitCheckpoint(
