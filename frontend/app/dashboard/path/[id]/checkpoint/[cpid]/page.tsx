@@ -31,18 +31,12 @@ export default function Container() {
     <div className="flex flex-col gap-6 p-4">
       <div className="border p-4 rounded-lg shadow-sm">
         <h2 className="text-xl font-semibold mb-2">Exercise</h2>
-        <ul>
-          {current.exercises?.map((ex) => (
-            <li key={ex.id}>
-              <Link
-                href={`/dashboard/path/${params.id}/checkpoint/${cpid}/exercise/${ex.id}`}
-                className="text-blue-600 underline"
-              >
-                Exercise {ex.id} - {ex.difficulty}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Link
+          href={`/dashboard/path/${params.id}/checkpoint/${cpid}/exercise/`}
+          className="text-blue-600 underline"
+        >
+          Exercise
+        </Link>
       </div>
 
       <div className="border p-4 rounded-lg shadow-sm">
