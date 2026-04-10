@@ -23,7 +23,8 @@
   "description": "",
   "main": "prisma.config.js",
   "scripts": {
-     "start": "node src/index.js",
+    "postinstall": "prisma generate",
+    "start": "node src/index.js",
     "dev": "nodemon --exec \"node --env-file=.env\" src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
