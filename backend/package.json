@@ -16,17 +16,19 @@
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
-    "prisma": "^6.19.3"
+    "prisma": "^7.7.0"
   },
   "name": "backend",
   "version": "1.0.0",
   "description": "",
   "main": "prisma.config.js",
   "scripts": {
+    "build": "npx prisma generate && nest build",
     "postinstall": "prisma generate",
     "start": "node src/index.js",
     "dev": "nodemon --exec \"node --env-file=.env\" src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:prod": "npx prisma db push && node dist/apps/backend/main"
   },
   "keywords": [],
   "author": "",
