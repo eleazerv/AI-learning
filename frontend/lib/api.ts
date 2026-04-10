@@ -21,8 +21,7 @@ import type {
   ReadResponse,
 } from "@/types";
 
-const BASE_URL = "http://localhost:3001" ;
-
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 // axios
 async function getAuthHeaders() {
   const supabase = createClient();

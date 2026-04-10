@@ -19,7 +19,10 @@ import leaderboardRouter from "./router/leaderboard.routes.js";
 const app = express();
 
 app.use(cors({
-    origin: "http://localhost:4000",
+    origin: [
+        'https://easygoing-simplicity-production-0401.up.railway.app',
+        'http://localhost:4000'
+    ] ,
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
 }))
