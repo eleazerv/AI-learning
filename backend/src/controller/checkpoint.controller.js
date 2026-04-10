@@ -175,6 +175,7 @@ export const getProgress = async (req, res) => {
     const progress = await prisma.checkpointProgress.findUnique({
       where: { userId_checkpointId: { userId, checkpointId: id } },
     })
+    
  
     return res.status(200).json({
       data: progress,

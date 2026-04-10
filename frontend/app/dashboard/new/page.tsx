@@ -189,7 +189,6 @@ export default function StudyForm() {
                         {...field}
                         id="learningStyle"
                         placeholder="Berikan deskripsi mengenai gaya belajar Anda"
-                        rows={6}
                         className="min-h-24 resize-none"
                         aria-invalid={fieldState.invalid}
                       />
@@ -211,7 +210,7 @@ export default function StudyForm() {
                     <Input
                       {...field}
                       id="requestUser"
-                      placeholder="Username"
+                      placeholder="Calculus ( turunan , limit , integral) "
                       aria-invalid={fieldState.invalid}
                     />
                     {fieldState.invalid && (

@@ -111,6 +111,11 @@ export const createLearningPath = async (req, res) => {
         }
     })
 
+    const firstCheckpoint = await prisma.checkpoint.update({
+        where : {id : learningPath.checkpoints[0].id},
+        data : {status : "unlocked"} 
+    })
+
     const createdCheckpoints = []
     for ( const [i,cp] of outline.checkpoints.entries()){ 
         const checkpoint = await prisma.checkpoint.create({
@@ -124,6 +129,8 @@ export const createLearningPath = async (req, res) => {
         })
         createdCheckpoints.push(checkpoint)
     }
+
+
     
     console.log(" Outline generated successfully!", {
         estimatedWeeks: outline.estimatedWeeks,
