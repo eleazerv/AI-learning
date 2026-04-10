@@ -27,6 +27,8 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"],
 }))
 
+app.options("*", cors());
+
 app.use(express.json());
 
 app.use("/api/profile",profileRouter);
@@ -39,6 +41,6 @@ app.use("/api/streak",streakRouter);
 // app.use("api/chat",chatRouter);
 
 
-app.listen(process.env.PORT, () => {
-    console.log("Server is running on port", process.env.PORT);
+app.listen(process.env.PORT || 3001, () => {
+    console.log("Server is running on port", process.env.PORT || 3001);
 });
